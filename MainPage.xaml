@@ -3,60 +3,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
              x:Class="VisualEditor.MainPage"
-             Title="Mini Photoshop">
+             Title="VisualEditor">
 
-    <VerticalStackLayout Spacing="10" Padding="10">
-        <!-- Narzędzia kolorów -->
-        <HorizontalStackLayout>
-            <Label Text="R:" VerticalOptions="Center"/>
-            <Slider x:Name="RSlider" Minimum="0" Maximum="255" Value="0" WidthRequest="100" ValueChanged="RGBChanged"/>
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,200">
+        <!-- Top toolbar -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2" BackgroundColor="#EEE" Padding="10">
+            <HorizontalStackLayout Spacing="15">
+                <Label Text="🎨 VisualEditor" FontAttributes="Bold" FontSize="18" VerticalOptions="Center"/>
+                <Button Text="Save Image" Clicked="OnSaveClicked"/>
+            </HorizontalStackLayout>
+        </Border>
 
-            <Label Text="G:" VerticalOptions="Center"/>
-            <Slider x:Name="GSlider" Minimum="0" Maximum="255" Value="0" WidthRequest="100" ValueChanged="RGBChanged"/>
+        <!-- Left side: canvas and tools -->
+        <VerticalStackLayout Grid.Row="1" Grid.Column="0" Padding="10" Spacing="10">
+            <!-- RGB sliders -->
+            <HorizontalStackLayout>
+                <Label Text="R:"/>
+                <Slider x:Name="RSlider" Minimum="0" Maximum="255" Value="0" WidthRequest="100" ValueChanged="RGBChanged"/>
+                <Label Text="G:"/>
+                <Slider x:Name="GSlider" Minimum="0" Maximum="255" Value="0" WidthRequest="100" ValueChanged="RGBChanged"/>
+                <Label Text="B:"/>
+                <Slider x:Name="BSlider" Minimum="0" Maximum="255" Value="0" WidthRequest="100" ValueChanged="RGBChanged"/>
+                <BoxView x:Name="ColorPreview" WidthRequest="30" HeightRequest="30" BackgroundColor="Black" />
+            </HorizontalStackLayout>
 
-            <Label Text="B:" VerticalOptions="Center"/>
-            <Slider x:Name="BSlider" Minimum="0" Maximum="255" Value="0" WidthRequest="100" ValueChanged="RGBChanged"/>
+            <!-- Predefined colors -->
+            <HorizontalStackLayout>
+                <Label Text="Colors:" VerticalOptions="Center"/>
+                <BoxView Color="Black" WidthRequest="30" HeightRequest="30">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <BoxView Color="Red" WidthRequest="30" HeightRequest="30">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <BoxView Color="Green" WidthRequest="30" HeightRequest="30">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+                <BoxView Color="Blue" WidthRequest="30" HeightRequest="30">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+            </HorizontalStackLayout>
 
-            <BoxView x:Name="ColorPreview" WidthRequest="30" HeightRequest="30" BackgroundColor="Black" />
-        </HorizontalStackLayout>
+            <!-- Color slots -->
+            <HorizontalStackLayout x:Name="ColorSlotsPanel" Spacing="5" Padding="0,10,0,0"/>
 
-        <!-- Przycisk zapisu -->
-        <Button Text="Zapisz obraz" Clicked="OnSaveClicked"/>
+            <!-- Canvas -->
+            <skia:SKCanvasView x:Name="CanvasView"
+                               HeightRequest="500"
+                               PaintSurface="OnPaintSurface"
+                               EnableTouchEvents="True"
+                               Touch="OnCanvasTouched"/>
+        </VerticalStackLayout>
 
-        
-        <!-- Predefiniowane kolory -->
-        <HorizontalStackLayout Spacing="5">
-            <Label Text="Kolory:" VerticalOptions="Center"/>
-            <BoxView Color="Black" WidthRequest="30" HeightRequest="30">
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped" NumberOfTapsRequired="1"/>
-                </BoxView.GestureRecognizers>
-            </BoxView>
-            <BoxView Color="Red" WidthRequest="30" HeightRequest="30">
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
-                </BoxView.GestureRecognizers>
-            </BoxView>
-            <BoxView Color="Green" WidthRequest="30" HeightRequest="30">
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
-                </BoxView.GestureRecognizers>
-            </BoxView>
-            <BoxView Color="Blue" WidthRequest="30" HeightRequest="30">
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
-                </BoxView.GestureRecognizers>
-            </BoxView>
-        </HorizontalStackLayout>
-
-        <!-- Sloty kolorów -->
-        <HorizontalStackLayout x:Name="ColorSlotsPanel" Spacing="5" Padding="0,10,0,0"/>
-
-        <!-- Płótno -->
-        <skia:SKCanvasView x:Name="CanvasView"
-                           HeightRequest="500"
-                           PaintSurface="OnPaintSurface"
-                           EnableTouchEvents="True"
-                           Touch="OnCanvasTouched"/>
-    </VerticalStackLayout>
+        <!-- Right panel: layers -->
+        <VerticalStackLayout Grid.Row="1" Grid.Column="1" BackgroundColor="#F6F6F6" Padding="10" Spacing="10">
+            <Label Text="Layers" FontAttributes="Bold" FontSize="16"/>
+            <VerticalStackLayout x:Name="LayersPanel" Spacing="5"/>
+            <Button Text="Add Layer" Clicked="AddLayer_Clicked"/>
+            <Button Text="Remove Active" Clicked="RemoveLayer_Clicked"/>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
