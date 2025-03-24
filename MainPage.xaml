@@ -23,6 +23,35 @@
         <!-- Przycisk zapisu -->
         <Button Text="Zapisz obraz" Clicked="OnSaveClicked"/>
 
+        
+        <!-- Predefiniowane kolory -->
+        <HorizontalStackLayout Spacing="5">
+            <Label Text="Kolory:" VerticalOptions="Center"/>
+            <BoxView Color="Black" WidthRequest="30" HeightRequest="30">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped" NumberOfTapsRequired="1"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            <BoxView Color="Red" WidthRequest="30" HeightRequest="30">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            <BoxView Color="Green" WidthRequest="30" HeightRequest="30">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            <BoxView Color="Blue" WidthRequest="30" HeightRequest="30">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPredefinedColorTapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+        </HorizontalStackLayout>
+
+        <!-- Sloty kolorów -->
+        <HorizontalStackLayout x:Name="ColorSlotsPanel" Spacing="5" Padding="0,10,0,0"/>
+
         <!-- Płótno -->
         <skia:SKCanvasView x:Name="CanvasView"
                            HeightRequest="500"
